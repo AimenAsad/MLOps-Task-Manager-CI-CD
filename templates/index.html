@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Task Manager</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1 class="mt-4">Task Manager</h1>
+    <!-- add a new task -->
+    <form action="{{ url_for('add_task') }}" method="post" class="form-inline my-4">
+      <input type="text" name="task" class="form-control mr-2" placeholder="New Task">
+      <button type="submit" class="btn btn-primary">Add Task</button>
+    </form>
+    <!-- list of tasks -->
+    <ul class="list-group">
+      {% for task in tasks %}
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <span {% if task.completed %} style="text-decoration: line-through;" {% endif %}>
+          {{ task.name }}
+        </span>
+        <div>
+          {% if not task.completed %}
+          <a href="{{ url_for('complete_task', task_id=task._id) }}" class="btn btn-success btn-sm">Complete</a>
+          {% endif %}
+          <a href="{{ url_for('delete_task', task_id=task._id) }}" class="btn btn-danger btn-sm">Delete</a>
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</body>
+</html>

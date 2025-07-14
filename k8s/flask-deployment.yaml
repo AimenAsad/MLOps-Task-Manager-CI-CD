@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-deployment
+  labels:
+    app: flask
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: flask
+  template:
+    metadata:
+      labels:
+        app: flask
+    spec:
+      containers:
+      - name: flask
+        image: aimenasad/task-manager-flask-app:latest
+        ports:
+        - containerPort: 5000
+        env:
+        - name: FLASK_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: flask-secret-key
+        - name: MONGO_ROOT_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: mongo-root-username
+        - name: MONGO_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: mongo-root-password
+        - name: MONGO_HOST
+          value: "mongodb-service"
+        - name: MONGO_DB
+          value: "taskdb"

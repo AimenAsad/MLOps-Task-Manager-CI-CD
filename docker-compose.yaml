@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  flask-app:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      FLASK_SECRET_KEY: "your_secret_key"
+      MONGO_URI: "mongodb://mongodb:27017/taskdb"
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
